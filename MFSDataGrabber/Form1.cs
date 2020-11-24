@@ -21,20 +21,24 @@ namespace MFSDataGrabber
         private bool simConnectStatus;
         private SimConnect simConn;
 
+        // Переменная идентификатор Сим Коннекта.
         const int WM_USER_SIMCONNECT = 0x0402;
 
+        // Перечисление для пакетов данных.
         private enum DATA_STRUCT_ENUM
         {
             Plane,
             World
         }
 
+        // Перечесление полученных запросов от Сима
         private enum REQUEST_ENUM
         {
             planeReq,
             worldReq
                 
         }
+        // Структура данных, получаемая дла самолета
         private struct Plane
         {
             public double heading;
@@ -42,6 +46,7 @@ namespace MFSDataGrabber
             public double speed;
         }
 
+        // Структура данных, получаемая для мира
         private struct World
         {
             public double windPower;
@@ -74,6 +79,8 @@ namespace MFSDataGrabber
 
             try
             {
+                // Создаем контроллер обрабоки данных и выбираем данные, которые необходимо получать от сима.
+
                 simConn = new SimConnect("MFSDataGrabber", this.Handle, WM_USER_SIMCONNECT, null, 0);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "Plane Heading Degrees True", "degrees", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "Indicated Altitude", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
@@ -129,6 +136,7 @@ namespace MFSDataGrabber
             }
         }
 
+        //Переопределение стандартной функции процедуры окна, для получения сообщений от Сим Коннекта.
         protected override void DefWndProc(ref Message m)
         {
             if (m.Msg == 0x402)
@@ -148,6 +156,8 @@ namespace MFSDataGrabber
         {
             if(simConnectStatus)
             {
+                // Запрашиваем небходимую дату у сима.
+
                 simConn.RequestDataOnSimObjectType(REQUEST_ENUM.planeReq, DATA_STRUCT_ENUM.Plane,0,SIMCONNECT_SIMOBJECT_TYPE.USER);
                 simConn.RequestDataOnSimObjectType(REQUEST_ENUM.worldReq, DATA_STRUCT_ENUM.World, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
 
