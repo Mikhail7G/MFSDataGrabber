@@ -43,6 +43,7 @@ namespace MFSDataGrabber
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.JetWayBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ConnBtn
@@ -68,9 +69,10 @@ namespace MFSDataGrabber
             // TrueHeading
             // 
             this.TrueHeading.AutoSize = true;
+            this.TrueHeading.Font = new System.Drawing.Font("Verdana", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.TrueHeading.Location = new System.Drawing.Point(476, 44);
             this.TrueHeading.Name = "TrueHeading";
-            this.TrueHeading.Size = new System.Drawing.Size(35, 13);
+            this.TrueHeading.Size = new System.Drawing.Size(52, 16);
             this.TrueHeading.TabIndex = 2;
             this.TrueHeading.Text = "label1";
             // 
@@ -82,9 +84,10 @@ namespace MFSDataGrabber
             // Altitude
             // 
             this.Altitude.AutoSize = true;
+            this.Altitude.Font = new System.Drawing.Font("Verdana", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
             this.Altitude.Location = new System.Drawing.Point(476, 72);
             this.Altitude.Name = "Altitude";
-            this.Altitude.Size = new System.Drawing.Size(35, 13);
+            this.Altitude.Size = new System.Drawing.Size(52, 16);
             this.Altitude.TabIndex = 3;
             this.Altitude.Text = "label1";
             // 
@@ -100,9 +103,10 @@ namespace MFSDataGrabber
             // Speed
             // 
             this.Speed.AutoSize = true;
-            this.Speed.Location = new System.Drawing.Point(476, 106);
+            this.Speed.Font = new System.Drawing.Font("Verdana", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))));
+            this.Speed.Location = new System.Drawing.Point(476, 105);
             this.Speed.Name = "Speed";
-            this.Speed.Size = new System.Drawing.Size(35, 13);
+            this.Speed.Size = new System.Drawing.Size(52, 16);
             this.Speed.TabIndex = 5;
             this.Speed.Text = "label1";
             // 
@@ -144,7 +148,7 @@ namespace MFSDataGrabber
             this.label4.AutoSize = true;
             this.label4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label4.Font = new System.Drawing.Font("Unispace", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(413, 105);
+            this.label4.Location = new System.Drawing.Point(413, 104);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 14);
             this.label4.TabIndex = 9;
@@ -172,12 +176,23 @@ namespace MFSDataGrabber
             this.label6.TabIndex = 11;
             this.label6.Text = "Wind Speed";
             // 
+            // JetWayBtn
+            // 
+            this.JetWayBtn.Location = new System.Drawing.Point(12, 222);
+            this.JetWayBtn.Name = "JetWayBtn";
+            this.JetWayBtn.Size = new System.Drawing.Size(75, 23);
+            this.JetWayBtn.TabIndex = 12;
+            this.JetWayBtn.Text = "Jetway";
+            this.JetWayBtn.UseVisualStyleBackColor = true;
+            this.JetWayBtn.Click += new System.EventHandler(this.JetWayBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(638, 295);
+            this.Controls.Add(this.JetWayBtn);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -213,6 +228,7 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button JetWayBtn;
     }
 }
 

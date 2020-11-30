@@ -38,6 +38,17 @@ namespace MFSDataGrabber
             worldReq
                 
         }
+
+        private enum EVENT_ENUM
+        {
+            toggleJetway
+        }
+
+        private enum SENDER_EVENT_ENUM
+        {
+            group0
+        }
+
         // Структура данных, получаемая дла самолета
         private struct Plane
         {
@@ -94,6 +105,8 @@ namespace MFSDataGrabber
                 simConn.OnRecvSimobjectDataBytype += OnResiveData;
                
                 simConnectStatus = true;
+
+                DataUpdateTimer.Interval = 1500;
                 DataUpdateTimer.Start();
                 ConnectStatusChange();
 
@@ -139,7 +152,7 @@ namespace MFSDataGrabber
         //Переопределение стандартной функции процедуры окна, для получения сообщений от Сим Коннекта.
         protected override void DefWndProc(ref Message m)
         {
-            if (m.Msg == 0x402)
+            if (m.Msg == WM_USER_SIMCONNECT)
             {
                 if (simConn != null && simConnectStatus)
                 {
@@ -166,6 +179,7 @@ namespace MFSDataGrabber
 
         private void OnResiveData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
+
             if(data.dwRequestID == 0)
             {
                 Plane recData = (Plane)data.dwData[0];
@@ -179,6 +193,18 @@ namespace MFSDataGrabber
                 World recData = (World)data.dwData[0];
                 WindPower.Text = recData.windPower.ToString();
             }
+        }
+
+        private void JetWayBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleJetway, "TOGGLE_JETWAY");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleJetway, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+
+
+
         }
     }
 }
