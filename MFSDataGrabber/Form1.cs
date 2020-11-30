@@ -41,7 +41,11 @@ namespace MFSDataGrabber
 
         private enum EVENT_ENUM
         {
-            toggleJetway
+            toggleJetway,
+            toggleDoor,
+            toggleGroundPower,
+            toggleCatering,
+            simRate
         }
 
         private enum SENDER_EVENT_ENUM
@@ -61,6 +65,7 @@ namespace MFSDataGrabber
         private struct World
         {
             public double windPower;
+            public double simRate;
         }
 
 
@@ -98,6 +103,7 @@ namespace MFSDataGrabber
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "AIRSPEED TRUE", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.World, "AMBIENT WIND VELOCITY", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.World, "SIMULATION RATE", "Number", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConn.RegisterDataDefineStruct<Plane>(DATA_STRUCT_ENUM.Plane);
                 simConn.RegisterDataDefineStruct<World>(DATA_STRUCT_ENUM.World);
@@ -192,9 +198,11 @@ namespace MFSDataGrabber
             {
                 World recData = (World)data.dwData[0];
                 WindPower.Text = recData.windPower.ToString();
+                SimRateLbl.Text = recData.simRate.ToString();
             }
         }
 
+        // Подключение jetway к самолету по нажатию кнопки
         private void JetWayBtn_Click(object sender, EventArgs e)
         {
             if (!simConnectStatus)
@@ -206,5 +214,34 @@ namespace MFSDataGrabber
 
 
         }
+        // REQUEST_FUEL_KEY -FUEL
+        // REQUEST_POWER_SUPPLY  - External power connection
+        // REQUEST_CATERING - catering truck
+        private void DoorBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleDoor, "REQUEST_BAGGAGE");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleDoor, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }
+
+        private void GroundPowerBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleGroundPower, "REQUEST_POWER_SUPPLY");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleGroundPower, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+         }
+
+        private void CateringBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleCatering, "REQUEST_CATERING");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleCatering, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }      
     }
 }

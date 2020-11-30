@@ -44,6 +44,11 @@ namespace MFSDataGrabber
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.JetWayBtn = new System.Windows.Forms.Button();
+            this.DoorBtn = new System.Windows.Forms.Button();
+            this.GroundPowerBtn = new System.Windows.Forms.Button();
+            this.CateringBtn = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.SimRateLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ConnBtn
@@ -186,12 +191,67 @@ namespace MFSDataGrabber
             this.JetWayBtn.UseVisualStyleBackColor = true;
             this.JetWayBtn.Click += new System.EventHandler(this.JetWayBtn_Click);
             // 
+            // DoorBtn
+            // 
+            this.DoorBtn.Location = new System.Drawing.Point(12, 251);
+            this.DoorBtn.Name = "DoorBtn";
+            this.DoorBtn.Size = new System.Drawing.Size(75, 23);
+            this.DoorBtn.TabIndex = 13;
+            this.DoorBtn.Text = "Door";
+            this.DoorBtn.UseVisualStyleBackColor = true;
+            this.DoorBtn.Click += new System.EventHandler(this.DoorBtn_Click);
+            // 
+            // GroundPowerBtn
+            // 
+            this.GroundPowerBtn.Location = new System.Drawing.Point(92, 229);
+            this.GroundPowerBtn.Name = "GroundPowerBtn";
+            this.GroundPowerBtn.Size = new System.Drawing.Size(75, 38);
+            this.GroundPowerBtn.TabIndex = 14;
+            this.GroundPowerBtn.Text = "Ground Power";
+            this.GroundPowerBtn.UseVisualStyleBackColor = true;
+            this.GroundPowerBtn.Click += new System.EventHandler(this.GroundPowerBtn_Click);
+            // 
+            // CateringBtn
+            // 
+            this.CateringBtn.Location = new System.Drawing.Point(173, 222);
+            this.CateringBtn.Name = "CateringBtn";
+            this.CateringBtn.Size = new System.Drawing.Size(75, 23);
+            this.CateringBtn.TabIndex = 15;
+            this.CateringBtn.Text = "Catering";
+            this.CateringBtn.UseVisualStyleBackColor = true;
+            this.CateringBtn.Click += new System.EventHandler(this.CateringBtn_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.label7.Font = new System.Drawing.Font("Unispace", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(233, 9);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(63, 14);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Sim Rate";
+            // 
+            // SimRateLbl
+            // 
+            this.SimRateLbl.AutoSize = true;
+            this.SimRateLbl.Location = new System.Drawing.Point(233, 43);
+            this.SimRateLbl.Name = "SimRateLbl";
+            this.SimRateLbl.Size = new System.Drawing.Size(35, 13);
+            this.SimRateLbl.TabIndex = 17;
+            this.SimRateLbl.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(638, 295);
+            this.Controls.Add(this.SimRateLbl);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.CateringBtn);
+            this.Controls.Add(this.GroundPowerBtn);
+            this.Controls.Add(this.DoorBtn);
             this.Controls.Add(this.JetWayBtn);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -229,6 +289,11 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button JetWayBtn;
+        private System.Windows.Forms.Button DoorBtn;
+        private System.Windows.Forms.Button GroundPowerBtn;
+        private System.Windows.Forms.Button CateringBtn;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label SimRateLbl;
     }
 }
 
