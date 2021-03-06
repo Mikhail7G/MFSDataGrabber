@@ -12,6 +12,9 @@ using Microsoft.FlightSimulator.SimConnect;
 using System.Runtime.InteropServices;
 
 
+
+
+
 namespace MFSDataGrabber
 {
     public partial class Form1 : Form
@@ -20,6 +23,10 @@ namespace MFSDataGrabber
 
         private bool simConnectStatus;
         private SimConnect simConn;
+
+        private double planeHeading;
+        private double tugRotateAngle = 0;
+        private double rotY;
 
         // Переменная идентификатор Сим Коннекта.
         const int WM_USER_SIMCONNECT = 0x0402;
@@ -45,7 +52,10 @@ namespace MFSDataGrabber
             toggleDoor,
             toggleGroundPower,
             toggleCatering,
-            simRate
+            simRate,
+            startPushBack,
+            tugSpeed,
+            tugHeading
         }
 
         private enum SENDER_EVENT_ENUM
@@ -59,6 +69,10 @@ namespace MFSDataGrabber
             public double heading;
             public double altitude;
             public double speed;
+            public double eta;
+            public double ete;
+
+            public double rotY;
         }
 
         // Структура данных, получаемая для мира
@@ -101,6 +115,10 @@ namespace MFSDataGrabber
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "Plane Heading Degrees True", "degrees", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "Indicated Altitude", "feet", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "AIRSPEED TRUE", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "GPS ETA", "Seconds", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "GPS ETE", "Seconds", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "Rotation Velocity Body Y", "feet per second", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.World, "AMBIENT WIND VELOCITY", "Knots", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.World, "SIMULATION RATE", "Number", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
@@ -115,6 +133,8 @@ namespace MFSDataGrabber
                 DataUpdateTimer.Interval = 1500;
                 DataUpdateTimer.Start();
                 ConnectStatusChange();
+
+               
 
 
             }
@@ -189,9 +209,20 @@ namespace MFSDataGrabber
             if(data.dwRequestID == 0)
             {
                 Plane recData = (Plane)data.dwData[0];
-                TrueHeading.Text = recData.heading.ToString();
-                Altitude.Text = recData.altitude.ToString();
-                Speed.Text = recData.speed.ToString();
+                TrueHeading.Text = Math.Round(recData.heading).ToString();
+                Altitude.Text = Math.Round(recData.altitude).ToString();
+                Speed.Text = Math.Round(recData.speed).ToString();
+            
+                TimeSpan tim = TimeSpan.FromSeconds(recData.eta);
+                Etalbl.Text = (tim).ToString(@"hh\:mm");
+
+                TimeSpan tim1 = TimeSpan.FromSeconds(recData.ete);
+                Etelbl.Text = (tim1).ToString(@"hh\:mm");
+
+                planeHeading = recData.heading;
+
+                rotY = recData.rotY;
+
             }
 
             if (data.dwRequestID == 1)
@@ -200,6 +231,18 @@ namespace MFSDataGrabber
                 WindPower.Text = recData.windPower.ToString();
                 SimRateLbl.Text = recData.simRate.ToString();
             }
+        }
+
+        //направление буксировщика
+        private uint SetTugHeading(double _angle)
+        {
+            var hdg = planeHeading;
+            hdg += _angle;
+            hdg %= 360;
+            hdg = hdg * 11930464;
+
+            return (uint)hdg;
+
         }
 
         // Подключение jetway к самолету по нажатию кнопки
@@ -222,8 +265,10 @@ namespace MFSDataGrabber
             if (!simConnectStatus)
                 return;
 
-            simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleDoor, "REQUEST_BAGGAGE");
-            simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleDoor, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleDoor, "TOGGLE_AIRCRAFT_EXIT");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleDoor, 5, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+      
         }
 
         private void GroundPowerBtn_Click(object sender, EventArgs e)
@@ -242,6 +287,94 @@ namespace MFSDataGrabber
 
             simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleCatering, "REQUEST_CATERING");
             simConn.TransmitClientEvent(0U, EVENT_ENUM.toggleCatering, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        }      
+        }
+
+        // Аэропорт вылета и прилета
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            FromLbl.Text = textBox1.Text.ToUpper();
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            Tolbl.Text = textBox2.Text.ToUpper();
+        }
+
+        private void PushBackStartBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.startPushBack, "TOGGLE_PUSHBACK");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.startPushBack, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }
+
+        private void TugTestSpeedBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.tugSpeed, "KEY_TUG_SPEED");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugSpeed, 0, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }
+
+        private void TugSpeedFastBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            uint speed = uint.Parse(TUGspeed.Text);
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.tugSpeed, "KEY_TUG_SPEED");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugSpeed, speed, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }
+
+        
+
+        private void TugLeftBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(+tugRotateAngle), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+
+         
+
+            //simConn.SetDataOnSimObject(, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 5);
+        }
+
+        private void TugRightBtn_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(-tugRotateAngle), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }
+
+        private void TugBtnBack_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(0), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            tugRotateAngle = Double.Parse(TUGAnglebox.Text);
+
+
+        }
+
+        private void TUGAnglebox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Convert.ToChar(8))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
