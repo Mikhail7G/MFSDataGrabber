@@ -63,15 +63,24 @@ namespace MFSDataGrabber
             this.label13 = new System.Windows.Forms.Label();
             this.PushBackStartBtn = new System.Windows.Forms.Button();
             this.TugTestSpeedBtn = new System.Windows.Forms.Button();
-            this.TugSpeedFastBtn = new System.Windows.Forms.Button();
-            this.TugLeftBtn = new System.Windows.Forms.Button();
             this.TugRightBtn = new System.Windows.Forms.Button();
             this.TugBtnBack = new System.Windows.Forms.Button();
-            this.TUGAnglebox = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.TUGspeed = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.TUGAwaitTimer = new System.Windows.Forms.Timer(this.components);
+            this.RudderTxt = new System.Windows.Forms.Label();
+            this.TugRtationTimer = new System.Windows.Forms.Timer(this.components);
+            this.HDGText = new System.Windows.Forms.Label();
+            this.CargoBtnDoor = new System.Windows.Forms.Button();
+            this.EmerDoorBtn = new System.Windows.Forms.Button();
+            this.ParkingBrakes = new System.Windows.Forms.CheckBox();
+            this.brakeStatelbl = new System.Windows.Forms.Label();
+            this.VelZlbl = new System.Windows.Forms.Label();
+            this.TUGStatusLbl = new System.Windows.Forms.Label();
+            this.ElevatorLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ConnBtn
@@ -208,11 +217,11 @@ namespace MFSDataGrabber
             // 
             // DoorBtn
             // 
-            this.DoorBtn.Location = new System.Drawing.Point(203, 343);
+            this.DoorBtn.Location = new System.Drawing.Point(283, 259);
             this.DoorBtn.Name = "DoorBtn";
             this.DoorBtn.Size = new System.Drawing.Size(75, 23);
             this.DoorBtn.TabIndex = 13;
-            this.DoorBtn.Text = "Door";
+            this.DoorBtn.Text = "MainDoor";
             this.DoorBtn.UseVisualStyleBackColor = true;
             this.DoorBtn.Click += new System.EventHandler(this.DoorBtn_Click);
             // 
@@ -395,85 +404,40 @@ namespace MFSDataGrabber
             // 
             // PushBackStartBtn
             // 
-            this.PushBackStartBtn.Location = new System.Drawing.Point(843, 288);
+            this.PushBackStartBtn.Location = new System.Drawing.Point(1266, 287);
             this.PushBackStartBtn.Name = "PushBackStartBtn";
             this.PushBackStartBtn.Size = new System.Drawing.Size(75, 23);
             this.PushBackStartBtn.TabIndex = 31;
-            this.PushBackStartBtn.Text = "P/B Start";
+            this.PushBackStartBtn.Text = "TUG Conn";
             this.PushBackStartBtn.UseVisualStyleBackColor = true;
             this.PushBackStartBtn.Click += new System.EventHandler(this.PushBackStartBtn_Click);
             // 
             // TugTestSpeedBtn
             // 
-            this.TugTestSpeedBtn.Location = new System.Drawing.Point(1185, 314);
+            this.TugTestSpeedBtn.Location = new System.Drawing.Point(1185, 321);
             this.TugTestSpeedBtn.Name = "TugTestSpeedBtn";
             this.TugTestSpeedBtn.Size = new System.Drawing.Size(75, 23);
             this.TugTestSpeedBtn.TabIndex = 32;
-            this.TugTestSpeedBtn.Text = "TUG Stop";
+            this.TugTestSpeedBtn.Text = "TUG Pause";
             this.TugTestSpeedBtn.UseVisualStyleBackColor = true;
             this.TugTestSpeedBtn.Click += new System.EventHandler(this.TugTestSpeedBtn_Click);
             // 
-            // TugSpeedFastBtn
-            // 
-            this.TugSpeedFastBtn.Location = new System.Drawing.Point(1185, 288);
-            this.TugSpeedFastBtn.Name = "TugSpeedFastBtn";
-            this.TugSpeedFastBtn.Size = new System.Drawing.Size(75, 23);
-            this.TugSpeedFastBtn.TabIndex = 33;
-            this.TugSpeedFastBtn.Text = "TUG Speed";
-            this.TugSpeedFastBtn.UseVisualStyleBackColor = true;
-            this.TugSpeedFastBtn.Click += new System.EventHandler(this.TugSpeedFastBtn_Click);
-            // 
-            // TugLeftBtn
-            // 
-            this.TugLeftBtn.Location = new System.Drawing.Point(799, 314);
-            this.TugLeftBtn.Name = "TugLeftBtn";
-            this.TugLeftBtn.Size = new System.Drawing.Size(75, 23);
-            this.TugLeftBtn.TabIndex = 34;
-            this.TugLeftBtn.Text = "TUG Left";
-            this.TugLeftBtn.UseVisualStyleBackColor = true;
-            this.TugLeftBtn.Click += new System.EventHandler(this.TugLeftBtn_Click);
-            // 
             // TugRightBtn
             // 
-            this.TugRightBtn.Location = new System.Drawing.Point(890, 314);
+            this.TugRightBtn.Location = new System.Drawing.Point(0, 0);
             this.TugRightBtn.Name = "TugRightBtn";
             this.TugRightBtn.Size = new System.Drawing.Size(75, 23);
-            this.TugRightBtn.TabIndex = 35;
-            this.TugRightBtn.Text = "TUG Right";
-            this.TugRightBtn.UseVisualStyleBackColor = true;
-            this.TugRightBtn.Click += new System.EventHandler(this.TugRightBtn_Click);
+            this.TugRightBtn.TabIndex = 52;
             // 
             // TugBtnBack
             // 
-            this.TugBtnBack.Location = new System.Drawing.Point(843, 343);
+            this.TugBtnBack.Location = new System.Drawing.Point(1185, 288);
             this.TugBtnBack.Name = "TugBtnBack";
             this.TugBtnBack.Size = new System.Drawing.Size(75, 23);
             this.TugBtnBack.TabIndex = 36;
-            this.TugBtnBack.Text = "TUG Back";
+            this.TugBtnBack.Text = "TUG Start";
             this.TugBtnBack.UseVisualStyleBackColor = true;
             this.TugBtnBack.Click += new System.EventHandler(this.TugBtnBack_Click);
-            // 
-            // TUGAnglebox
-            // 
-            this.TUGAnglebox.Location = new System.Drawing.Point(856, 262);
-            this.TUGAnglebox.Name = "TUGAnglebox";
-            this.TUGAnglebox.Size = new System.Drawing.Size(43, 20);
-            this.TUGAnglebox.TabIndex = 37;
-            this.TUGAnglebox.Text = "0";
-            this.TUGAnglebox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.TUGAnglebox.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            this.TUGAnglebox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TUGAnglebox_KeyPress);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label14.Font = new System.Drawing.Font("Unispace", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(840, 245);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(70, 14);
-            this.label14.TabIndex = 38;
-            this.label14.Text = "TUG angle";
             // 
             // label15
             // 
@@ -494,6 +458,8 @@ namespace MFSDataGrabber
             this.TUGspeed.TabIndex = 40;
             this.TUGspeed.Text = "0";
             this.TUGspeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TUGspeed.TextChanged += new System.EventHandler(this.TUGspeed_TextChanged);
+            this.TUGspeed.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TUGspeed_KeyPress);
             // 
             // label16
             // 
@@ -504,21 +470,142 @@ namespace MFSDataGrabber
             this.label16.TabIndex = 41;
             this.label16.Text = "label1";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(364, 347);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 42;
+            this.button1.Text = "Baggage";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(1266, 322);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 43;
+            this.button2.Text = "TUG disab";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // TUGAwaitTimer
+            // 
+            this.TUGAwaitTimer.Tick += new System.EventHandler(this.TUGAwaitTimer_Tick);
+            // 
+            // RudderTxt
+            // 
+            this.RudderTxt.AutoSize = true;
+            this.RudderTxt.Location = new System.Drawing.Point(1193, 221);
+            this.RudderTxt.Name = "RudderTxt";
+            this.RudderTxt.Size = new System.Drawing.Size(42, 13);
+            this.RudderTxt.TabIndex = 44;
+            this.RudderTxt.Text = "Rudder";
+            this.RudderTxt.Click += new System.EventHandler(this.RudderTxt_Click);
+            // 
+            // TugRtationTimer
+            // 
+            this.TugRtationTimer.Tick += new System.EventHandler(this.TugRtationTimer_Tick);
+            // 
+            // HDGText
+            // 
+            this.HDGText.AutoSize = true;
+            this.HDGText.Location = new System.Drawing.Point(1193, 197);
+            this.HDGText.Name = "HDGText";
+            this.HDGText.Size = new System.Drawing.Size(31, 13);
+            this.HDGText.TabIndex = 45;
+            this.HDGText.Text = "HDG";
+            this.HDGText.Click += new System.EventHandler(this.HDGText_Click);
+            // 
+            // CargoBtnDoor
+            // 
+            this.CargoBtnDoor.Location = new System.Drawing.Point(202, 259);
+            this.CargoBtnDoor.Name = "CargoBtnDoor";
+            this.CargoBtnDoor.Size = new System.Drawing.Size(75, 23);
+            this.CargoBtnDoor.TabIndex = 46;
+            this.CargoBtnDoor.Text = "CargoDoor";
+            this.CargoBtnDoor.UseVisualStyleBackColor = true;
+            this.CargoBtnDoor.Click += new System.EventHandler(this.CargoBtnDoor_Click);
+            // 
+            // EmerDoorBtn
+            // 
+            this.EmerDoorBtn.Location = new System.Drawing.Point(364, 259);
+            this.EmerDoorBtn.Name = "EmerDoorBtn";
+            this.EmerDoorBtn.Size = new System.Drawing.Size(75, 23);
+            this.EmerDoorBtn.TabIndex = 47;
+            this.EmerDoorBtn.Text = "EmerDoor";
+            this.EmerDoorBtn.UseVisualStyleBackColor = true;
+            this.EmerDoorBtn.Click += new System.EventHandler(this.EmerDoorBtn_Click);
+            // 
+            // ParkingBrakes
+            // 
+            this.ParkingBrakes.AutoSize = true;
+            this.ParkingBrakes.Location = new System.Drawing.Point(1096, 263);
+            this.ParkingBrakes.Name = "ParkingBrakes";
+            this.ParkingBrakes.Size = new System.Drawing.Size(64, 17);
+            this.ParkingBrakes.TabIndex = 48;
+            this.ParkingBrakes.Text = "ParkBrk";
+            this.ParkingBrakes.UseVisualStyleBackColor = true;
+            // 
+            // brakeStatelbl
+            // 
+            this.brakeStatelbl.AutoSize = true;
+            this.brakeStatelbl.Location = new System.Drawing.Point(1096, 234);
+            this.brakeStatelbl.Name = "brakeStatelbl";
+            this.brakeStatelbl.Size = new System.Drawing.Size(41, 13);
+            this.brakeStatelbl.TabIndex = 49;
+            this.brakeStatelbl.Text = "label17";
+            // 
+            // VelZlbl
+            // 
+            this.VelZlbl.AutoSize = true;
+            this.VelZlbl.Location = new System.Drawing.Point(1096, 197);
+            this.VelZlbl.Name = "VelZlbl";
+            this.VelZlbl.Size = new System.Drawing.Size(41, 13);
+            this.VelZlbl.TabIndex = 50;
+            this.VelZlbl.Text = "label17";
+            // 
+            // TUGStatusLbl
+            // 
+            this.TUGStatusLbl.AutoSize = true;
+            this.TUGStatusLbl.Location = new System.Drawing.Point(1193, 173);
+            this.TUGStatusLbl.Name = "TUGStatusLbl";
+            this.TUGStatusLbl.Size = new System.Drawing.Size(30, 13);
+            this.TUGStatusLbl.TabIndex = 51;
+            this.TUGStatusLbl.Text = "TUG";
+            // 
+            // ElevatorLbl
+            // 
+            this.ElevatorLbl.AutoSize = true;
+            this.ElevatorLbl.Location = new System.Drawing.Point(1241, 221);
+            this.ElevatorLbl.Name = "ElevatorLbl";
+            this.ElevatorLbl.Size = new System.Drawing.Size(46, 13);
+            this.ElevatorLbl.TabIndex = 53;
+            this.ElevatorLbl.Text = "Elevator";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1420, 380);
+            this.Controls.Add(this.ElevatorLbl);
+            this.Controls.Add(this.TUGStatusLbl);
+            this.Controls.Add(this.VelZlbl);
+            this.Controls.Add(this.brakeStatelbl);
+            this.Controls.Add(this.ParkingBrakes);
+            this.Controls.Add(this.EmerDoorBtn);
+            this.Controls.Add(this.CargoBtnDoor);
+            this.Controls.Add(this.HDGText);
+            this.Controls.Add(this.RudderTxt);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.TUGspeed);
             this.Controls.Add(this.label15);
-            this.Controls.Add(this.label14);
-            this.Controls.Add(this.TUGAnglebox);
             this.Controls.Add(this.TugBtnBack);
             this.Controls.Add(this.TugRightBtn);
-            this.Controls.Add(this.TugLeftBtn);
-            this.Controls.Add(this.TugSpeedFastBtn);
             this.Controls.Add(this.TugTestSpeedBtn);
             this.Controls.Add(this.PushBackStartBtn);
             this.Controls.Add(this.label13);
@@ -594,15 +681,24 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button PushBackStartBtn;
         private System.Windows.Forms.Button TugTestSpeedBtn;
-        private System.Windows.Forms.Button TugSpeedFastBtn;
-        private System.Windows.Forms.Button TugLeftBtn;
         private System.Windows.Forms.Button TugRightBtn;
         private System.Windows.Forms.Button TugBtnBack;
-        private System.Windows.Forms.TextBox TUGAnglebox;
-        private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox TUGspeed;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer TUGAwaitTimer;
+        private System.Windows.Forms.Label RudderTxt;
+        private System.Windows.Forms.Timer TugRtationTimer;
+        private System.Windows.Forms.Label HDGText;
+        private System.Windows.Forms.Button CargoBtnDoor;
+        private System.Windows.Forms.Button EmerDoorBtn;
+        private System.Windows.Forms.CheckBox ParkingBrakes;
+        private System.Windows.Forms.Label brakeStatelbl;
+        private System.Windows.Forms.Label VelZlbl;
+        private System.Windows.Forms.Label TUGStatusLbl;
+        private System.Windows.Forms.Label ElevatorLbl;
     }
 }
 
