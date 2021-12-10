@@ -81,6 +81,7 @@ namespace MFSDataGrabber
             this.VelZlbl = new System.Windows.Forms.Label();
             this.TUGStatusLbl = new System.Windows.Forms.Label();
             this.ElevatorLbl = new System.Windows.Forms.Label();
+            this.TUGSpeedLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ConnBtn
@@ -404,7 +405,7 @@ namespace MFSDataGrabber
             // 
             // PushBackStartBtn
             // 
-            this.PushBackStartBtn.Location = new System.Drawing.Point(1266, 287);
+            this.PushBackStartBtn.Location = new System.Drawing.Point(908, 300);
             this.PushBackStartBtn.Name = "PushBackStartBtn";
             this.PushBackStartBtn.Size = new System.Drawing.Size(75, 23);
             this.PushBackStartBtn.TabIndex = 31;
@@ -414,7 +415,7 @@ namespace MFSDataGrabber
             // 
             // TugTestSpeedBtn
             // 
-            this.TugTestSpeedBtn.Location = new System.Drawing.Point(1185, 321);
+            this.TugTestSpeedBtn.Location = new System.Drawing.Point(827, 334);
             this.TugTestSpeedBtn.Name = "TugTestSpeedBtn";
             this.TugTestSpeedBtn.Size = new System.Drawing.Size(75, 23);
             this.TugTestSpeedBtn.TabIndex = 32;
@@ -431,7 +432,7 @@ namespace MFSDataGrabber
             // 
             // TugBtnBack
             // 
-            this.TugBtnBack.Location = new System.Drawing.Point(1185, 288);
+            this.TugBtnBack.Location = new System.Drawing.Point(827, 301);
             this.TugBtnBack.Name = "TugBtnBack";
             this.TugBtnBack.Size = new System.Drawing.Size(75, 23);
             this.TugBtnBack.TabIndex = 36;
@@ -444,19 +445,19 @@ namespace MFSDataGrabber
             this.label15.AutoSize = true;
             this.label15.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label15.Font = new System.Drawing.Font("Unispace", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(1182, 245);
+            this.label15.Location = new System.Drawing.Point(813, 258);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(70, 14);
+            this.label15.Size = new System.Drawing.Size(98, 14);
             this.label15.TabIndex = 39;
-            this.label15.Text = "TUG speed";
+            this.label15.Text = "Max TUG speed";
             // 
             // TUGspeed
             // 
-            this.TUGspeed.Location = new System.Drawing.Point(1196, 262);
+            this.TUGspeed.Location = new System.Drawing.Point(838, 275);
             this.TUGspeed.Name = "TUGspeed";
             this.TUGspeed.Size = new System.Drawing.Size(43, 20);
             this.TUGspeed.TabIndex = 40;
-            this.TUGspeed.Text = "0";
+            this.TUGspeed.Text = "5";
             this.TUGspeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TUGspeed.TextChanged += new System.EventHandler(this.TUGspeed_TextChanged);
             this.TUGspeed.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TUGspeed_KeyPress);
@@ -482,7 +483,7 @@ namespace MFSDataGrabber
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1266, 322);
+            this.button2.Location = new System.Drawing.Point(908, 335);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 43;
@@ -497,7 +498,7 @@ namespace MFSDataGrabber
             // RudderTxt
             // 
             this.RudderTxt.AutoSize = true;
-            this.RudderTxt.Location = new System.Drawing.Point(1193, 221);
+            this.RudderTxt.Location = new System.Drawing.Point(835, 234);
             this.RudderTxt.Name = "RudderTxt";
             this.RudderTxt.Size = new System.Drawing.Size(42, 13);
             this.RudderTxt.TabIndex = 44;
@@ -511,7 +512,7 @@ namespace MFSDataGrabber
             // HDGText
             // 
             this.HDGText.AutoSize = true;
-            this.HDGText.Location = new System.Drawing.Point(1193, 197);
+            this.HDGText.Location = new System.Drawing.Point(835, 210);
             this.HDGText.Name = "HDGText";
             this.HDGText.Size = new System.Drawing.Size(31, 13);
             this.HDGText.TabIndex = 45;
@@ -541,7 +542,7 @@ namespace MFSDataGrabber
             // ParkingBrakes
             // 
             this.ParkingBrakes.AutoSize = true;
-            this.ParkingBrakes.Location = new System.Drawing.Point(1096, 263);
+            this.ParkingBrakes.Location = new System.Drawing.Point(738, 276);
             this.ParkingBrakes.Name = "ParkingBrakes";
             this.ParkingBrakes.Size = new System.Drawing.Size(64, 17);
             this.ParkingBrakes.TabIndex = 48;
@@ -551,7 +552,7 @@ namespace MFSDataGrabber
             // brakeStatelbl
             // 
             this.brakeStatelbl.AutoSize = true;
-            this.brakeStatelbl.Location = new System.Drawing.Point(1096, 234);
+            this.brakeStatelbl.Location = new System.Drawing.Point(738, 247);
             this.brakeStatelbl.Name = "brakeStatelbl";
             this.brakeStatelbl.Size = new System.Drawing.Size(41, 13);
             this.brakeStatelbl.TabIndex = 49;
@@ -560,7 +561,7 @@ namespace MFSDataGrabber
             // VelZlbl
             // 
             this.VelZlbl.AutoSize = true;
-            this.VelZlbl.Location = new System.Drawing.Point(1096, 197);
+            this.VelZlbl.Location = new System.Drawing.Point(738, 210);
             this.VelZlbl.Name = "VelZlbl";
             this.VelZlbl.Size = new System.Drawing.Size(41, 13);
             this.VelZlbl.TabIndex = 50;
@@ -569,7 +570,7 @@ namespace MFSDataGrabber
             // TUGStatusLbl
             // 
             this.TUGStatusLbl.AutoSize = true;
-            this.TUGStatusLbl.Location = new System.Drawing.Point(1193, 173);
+            this.TUGStatusLbl.Location = new System.Drawing.Point(835, 186);
             this.TUGStatusLbl.Name = "TUGStatusLbl";
             this.TUGStatusLbl.Size = new System.Drawing.Size(30, 13);
             this.TUGStatusLbl.TabIndex = 51;
@@ -578,18 +579,28 @@ namespace MFSDataGrabber
             // ElevatorLbl
             // 
             this.ElevatorLbl.AutoSize = true;
-            this.ElevatorLbl.Location = new System.Drawing.Point(1241, 221);
+            this.ElevatorLbl.Location = new System.Drawing.Point(883, 234);
             this.ElevatorLbl.Name = "ElevatorLbl";
             this.ElevatorLbl.Size = new System.Drawing.Size(46, 13);
             this.ElevatorLbl.TabIndex = 53;
             this.ElevatorLbl.Text = "Elevator";
+            // 
+            // TUGSpeedLbl
+            // 
+            this.TUGSpeedLbl.AutoSize = true;
+            this.TUGSpeedLbl.Location = new System.Drawing.Point(888, 278);
+            this.TUGSpeedLbl.Name = "TUGSpeedLbl";
+            this.TUGSpeedLbl.Size = new System.Drawing.Size(64, 13);
+            this.TUGSpeedLbl.TabIndex = 54;
+            this.TUGSpeedLbl.Text = "TUG Speed";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1420, 380);
+            this.ClientSize = new System.Drawing.Size(1002, 380);
+            this.Controls.Add(this.TUGSpeedLbl);
             this.Controls.Add(this.ElevatorLbl);
             this.Controls.Add(this.TUGStatusLbl);
             this.Controls.Add(this.VelZlbl);
@@ -638,6 +649,8 @@ namespace MFSDataGrabber
             this.Controls.Add(this.TrueHeading);
             this.Controls.Add(this.SimConnectLbl);
             this.Controls.Add(this.ConnBtn);
+            this.MaximumSize = new System.Drawing.Size(1018, 419);
+            this.MinimumSize = new System.Drawing.Size(1018, 419);
             this.Name = "Form1";
             this.Text = "Form1";
             this.TransparencyKey = System.Drawing.Color.Yellow;
@@ -699,6 +712,7 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label VelZlbl;
         private System.Windows.Forms.Label TUGStatusLbl;
         private System.Windows.Forms.Label ElevatorLbl;
+        private System.Windows.Forms.Label TUGSpeedLbl;
     }
 }
 

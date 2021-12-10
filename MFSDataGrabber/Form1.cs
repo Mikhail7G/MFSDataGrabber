@@ -37,6 +37,9 @@ namespace MFSDataGrabber
         private uint emerDoor = 0;
         private uint cargoDoor = 0;
 
+        private int maxTowSpeed = 5;
+        private bool planeParkingBrake = true;
+
         
 
 
@@ -141,8 +144,10 @@ namespace MFSDataGrabber
 
         public Form1()
         {
+            TopMost = true;
             InitializeComponent();
             InitalComponents();
+            
         }
 
 
@@ -310,10 +315,8 @@ namespace MFSDataGrabber
                 ElevatorDir = Math.Round((recData.elevatorDirection), 3);
 
                 brakeStatelbl.Text = (recData.parkingBrake).ToString();
-                //   ParkingBrakes.CheckState = CheckState.Checked;
-                  bool prk = recData.parkingBrake;
-
-                   _ = prk ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
+                planeParkingBrake = recData.parkingBrake;
+                _ = planeParkingBrake ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
             }
 
             if (data.dwRequestID == 1)
@@ -356,7 +359,8 @@ namespace MFSDataGrabber
         }
 
         //направление буксировщика
-        private uint SetTugHeading(double _angle)
+        [Obsolete("TUG rotating by joystic")]
+        private  uint SetTugHeading(double _angle)
         {
             var hdg = planeHeading;
             hdg += _angle;
@@ -366,7 +370,7 @@ namespace MFSDataGrabber
             return (uint)hdg;
 
         }
-
+        [Obsolete("TUG rotating by joystic")]
         private uint SetTugHeadingReversed()
         {
             var hdg = planeHeading+180;
@@ -376,6 +380,21 @@ namespace MFSDataGrabber
 
             return (uint)hdg;
 
+        }
+
+        void TUgPause()
+        {
+            TugRtationTimer.Stop();
+            TUGAwaitTimer.Start();
+            TugSpeed= 0;
+        }
+
+        void TUGStart()
+        {
+            simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
+
+            TUGAwaitTimer.Stop();
+            TugRtationTimer.Start();
         }
 
         // Подключение jetway к самолету по нажатию кнопки
@@ -469,16 +488,6 @@ namespace MFSDataGrabber
         private void TUGAwaitTimer_Tick(object sender, EventArgs e)
         {
             simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 1);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)10);
-
-
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityX, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityY, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationX, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationY, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-
         }
 
 
@@ -487,12 +496,7 @@ namespace MFSDataGrabber
             if (!simConnectStatus)
                 return;
 
-            //simConn.MapClientEventToSimEvent(EVENT_ENUM.tugSpeed, "KEY_TUG_SPEED");
-            //simConn.TransmitClientEvent(0U, EVENT_ENUM.tugSpeed, 0, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-          
-
-            TugRtationTimer.Stop();      
-            TUGAwaitTimer.Start();
+            TUgPause();
         }
    
       
@@ -502,22 +506,10 @@ namespace MFSDataGrabber
             if (!simConnectStatus)
                 return;
 
-            
-            simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-           
-            //simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
-            //simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(0), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-
-
-
-            TUGAwaitTimer.Stop();
-            TugRtationTimer.Start();
+            TUGStart();
         }
 
-       
-
-       
-
+  
         private void button1_Click(object sender, EventArgs e)
         {//загрузка багажа
             if (!simConnectStatus)
@@ -547,17 +539,30 @@ namespace MFSDataGrabber
                 return;
             HDGText.Text = (RudderDir*90).ToString();
 
-            double calcSpeed;
             TugSpeed += ElevatorDir;
-            _= TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, 5) : TugSpeed = Math.Max(TugSpeed, -5);
-            TUGspeed.Text = TugSpeed.ToString();
+            maxTowSpeed = int.Parse(TUGspeed.Text);
+            _ = TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, maxTowSpeed) : TugSpeed = Math.Max(TugSpeed, -maxTowSpeed);
+  
+            TUGSpeedLbl.Text = TugSpeed.ToString();
 
+            if (!planeParkingBrake)
+            {
+                simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
 
-           // SetTugHeading(+RudderDir);
-
-            simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
-            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(+RudderDir*90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-            simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)-TugSpeed);
+                if (TugSpeed > 0)
+                {
+                    simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(+RudderDir * 90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+                }
+                else
+                {
+                    simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(-RudderDir * 90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+                }
+                simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)-TugSpeed);
+            }
+            else
+            {
+                TUgPause();
+            }
         }
 
         private void RudderTxt_Click(object sender, EventArgs e)
@@ -587,10 +592,10 @@ namespace MFSDataGrabber
 
         private void TUGspeed_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Convert.ToChar(8))
-            //{
-            //    e.Handled = true;
-            //}
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Convert.ToChar(8))
+            {
+                e.Handled = true;
+            }
         }
     }
 }
