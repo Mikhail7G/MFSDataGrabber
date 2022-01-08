@@ -63,7 +63,6 @@ namespace MFSDataGrabber
             this.label13 = new System.Windows.Forms.Label();
             this.PushBackStartBtn = new System.Windows.Forms.Button();
             this.TugTestSpeedBtn = new System.Windows.Forms.Button();
-            this.TugRightBtn = new System.Windows.Forms.Button();
             this.TugBtnBack = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.TUGspeed = new System.Windows.Forms.TextBox();
@@ -422,13 +421,6 @@ namespace MFSDataGrabber
             this.TugTestSpeedBtn.UseVisualStyleBackColor = true;
             this.TugTestSpeedBtn.Click += new System.EventHandler(this.TugTestSpeedBtn_Click);
             // 
-            // TugRightBtn
-            // 
-            this.TugRightBtn.Location = new System.Drawing.Point(0, 0);
-            this.TugRightBtn.Name = "TugRightBtn";
-            this.TugRightBtn.Size = new System.Drawing.Size(75, 23);
-            this.TugRightBtn.TabIndex = 52;
-            // 
             // TugBtnBack
             // 
             this.TugBtnBack.Location = new System.Drawing.Point(1185, 288);
@@ -605,7 +597,6 @@ namespace MFSDataGrabber
             this.Controls.Add(this.TUGspeed);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.TugBtnBack);
-            this.Controls.Add(this.TugRightBtn);
             this.Controls.Add(this.TugTestSpeedBtn);
             this.Controls.Add(this.PushBackStartBtn);
             this.Controls.Add(this.label13);
@@ -681,7 +672,6 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button PushBackStartBtn;
         private System.Windows.Forms.Button TugTestSpeedBtn;
-        private System.Windows.Forms.Button TugRightBtn;
         private System.Windows.Forms.Button TugBtnBack;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox TUGspeed;
