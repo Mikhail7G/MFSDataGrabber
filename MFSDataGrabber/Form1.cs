@@ -38,9 +38,10 @@ namespace MFSDataGrabber
         private uint cargoDoor = 0;
 
         private int maxTowSpeed = 5;
-        private bool planeParkingBrake = true;
+        private bool planeParkingBrake = false;
+        private bool ASOBOplaneParkingBrake = false;
 
-        
+
 
 
         // Переменная идентификатор Сим Коннекта.
@@ -86,6 +87,7 @@ namespace MFSDataGrabber
             tugSpeed,
             tugHeading,
             luggage,
+            ramp,
             door,
             tugDisable
            
@@ -108,6 +110,7 @@ namespace MFSDataGrabber
             public double rudderDirection;
             public double elevatorDirection;
             public bool parkingBrake;
+            public bool ASOBObrakes;
         }
 
         private struct ExitDataStruct
@@ -183,6 +186,7 @@ namespace MFSDataGrabber
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "RUDDER POSITION", "position", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "ELEVATOR POSITION", "position", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "BRAKE PARKING POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "A32NX_PARK_BRAKE_LEVER_POS", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.PushbackWait, "Pushback Wait", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.TugStatus, "PUSHBACK ATTACHED", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
@@ -317,6 +321,9 @@ namespace MFSDataGrabber
                 brakeStatelbl.Text = (recData.parkingBrake).ToString();
                 planeParkingBrake = recData.parkingBrake;
                 _ = planeParkingBrake ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
+
+                ASOBOplaneParkingBrake = recData.ASOBObrakes;
+                _ = ASOBOplaneParkingBrake ? (ASOBOParkBrk.CheckState = CheckState.Checked) : (ASOBOParkBrk.CheckState = CheckState.Unchecked);
             }
 
             if (data.dwRequestID == 1)
@@ -545,7 +552,7 @@ namespace MFSDataGrabber
   
             TUGSpeedLbl.Text = TugSpeed.ToString();
 
-            if (!planeParkingBrake)
+            if ((!planeParkingBrake) && (!ASOBOplaneParkingBrake)) 
             {
                 simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
 
@@ -596,6 +603,16 @@ namespace MFSDataGrabber
             {
                 e.Handled = true;
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!simConnectStatus)
+                return;
+
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.ramp, "TOGGLE_RAMPTRUCK");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.ramp, SetTugHeading(0), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+
         }
     }
 }
