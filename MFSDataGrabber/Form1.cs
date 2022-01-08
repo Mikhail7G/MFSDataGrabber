@@ -467,24 +467,13 @@ namespace MFSDataGrabber
             simConn.MapClientEventToSimEvent(EVENT_ENUM.startPushBack, "TOGGLE_PUSHBACK");
             simConn.TransmitClientEvent(0U, EVENT_ENUM.startPushBack, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
 
-
-
             TUGAwaitTimer.Start();
         }
 
         private void TUGAwaitTimer_Tick(object sender, EventArgs e)
         {
             simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 1);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)10);
-
-
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityX, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityY, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationX, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationY, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-            //simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-
+         
         }
 
 
@@ -492,40 +481,24 @@ namespace MFSDataGrabber
         {
             if (!simConnectStatus)
                 return;
-
-            //simConn.MapClientEventToSimEvent(EVENT_ENUM.tugSpeed, "KEY_TUG_SPEED");
-            //simConn.TransmitClientEvent(0U, EVENT_ENUM.tugSpeed, 0, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-          
+            TugSpeed = 0;
 
             TugRtationTimer.Stop();      
             TUGAwaitTimer.Start();
 
-            TugSpeed = 0;
         }
-   
-      
-
+ 
         private void TugBtnBack_Click(object sender, EventArgs e)
         {
             if (!simConnectStatus)
                 return;
+            TugSpeed = 0;
 
-            
             simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
-           
-            //simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
-            //simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(0), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-
-
 
             TUGAwaitTimer.Stop();
-           
             TugRtationTimer.Start();
         }
-
-       
-
-       
 
         private void button1_Click(object sender, EventArgs e)
         {//загрузка багажа
@@ -561,9 +534,6 @@ namespace MFSDataGrabber
             CurrentTUGSpeedLbl.Text = TugSpeed.ToString(); 
 
             _= TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, maxTUGSpeed) : TugSpeed = Math.Max(TugSpeed, -maxTUGSpeed);
-           // TUGspeed.Text = TugSpeed.ToString();
-
-           // SetTugHeading(+RudderDir);
 
             simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
             simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(+RudderDir*90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
