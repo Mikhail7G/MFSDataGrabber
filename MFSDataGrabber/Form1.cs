@@ -143,6 +143,8 @@ namespace MFSDataGrabber
 
         public Form1()
         {
+            TopMost = true;
+
             InitializeComponent();
             InitalComponents();
         }
@@ -554,14 +556,12 @@ namespace MFSDataGrabber
                 return;
             HDGText.Text = (RudderDir*90).ToString();
 
-            
-
+            maxTUGSpeed = Double.Parse(TUGspeed.Text);
             TugSpeed += ElevatorDir;
             CurrentTUGSpeedLbl.Text = TugSpeed.ToString(); 
 
             _= TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, maxTUGSpeed) : TugSpeed = Math.Max(TugSpeed, -maxTUGSpeed);
-            TUGspeed.Text = TugSpeed.ToString();
-
+           // TUGspeed.Text = TugSpeed.ToString();
 
            // SetTugHeading(+RudderDir);
 

@@ -450,7 +450,7 @@ namespace MFSDataGrabber
             this.TUGspeed.Name = "TUGspeed";
             this.TUGspeed.Size = new System.Drawing.Size(43, 20);
             this.TUGspeed.TabIndex = 40;
-            this.TUGspeed.Text = "0";
+            this.TUGspeed.Text = "5";
             this.TUGspeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TUGspeed.TextChanged += new System.EventHandler(this.TUGspeed_TextChanged);
             this.TUGspeed.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TUGspeed_KeyPress);
