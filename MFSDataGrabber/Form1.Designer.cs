@@ -81,6 +81,7 @@ namespace MFSDataGrabber
             this.TUGStatusLbl = new System.Windows.Forms.Label();
             this.ElevatorLbl = new System.Windows.Forms.Label();
             this.ASOBOparkBrk = new System.Windows.Forms.CheckBox();
+            this.CurrentTUGSpeedLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ConnBtn
@@ -587,12 +588,22 @@ namespace MFSDataGrabber
             this.ASOBOparkBrk.Text = "ParkBrk";
             this.ASOBOparkBrk.UseVisualStyleBackColor = true;
             // 
+            // CurrentTUGSpeedLbl
+            // 
+            this.CurrentTUGSpeedLbl.AutoSize = true;
+            this.CurrentTUGSpeedLbl.Location = new System.Drawing.Point(923, 260);
+            this.CurrentTUGSpeedLbl.Name = "CurrentTUGSpeedLbl";
+            this.CurrentTUGSpeedLbl.Size = new System.Drawing.Size(64, 13);
+            this.CurrentTUGSpeedLbl.TabIndex = 55;
+            this.CurrentTUGSpeedLbl.Text = "TUG Speed";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1054, 380);
+            this.Controls.Add(this.CurrentTUGSpeedLbl);
             this.Controls.Add(this.ASOBOparkBrk);
             this.Controls.Add(this.ElevatorLbl);
             this.Controls.Add(this.TUGStatusLbl);
@@ -702,6 +713,7 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label TUGStatusLbl;
         private System.Windows.Forms.Label ElevatorLbl;
         private System.Windows.Forms.CheckBox ASOBOparkBrk;
+        private System.Windows.Forms.Label CurrentTUGSpeedLbl;
     }
 }
 

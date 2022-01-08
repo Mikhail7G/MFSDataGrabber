@@ -30,6 +30,7 @@ namespace MFSDataGrabber
         private double ElevatorDir = 0;
         private double rotY;
         private double TugSpeed = 0;
+        private double maxTUGSpeed = 5;
 
         private double[] ExitTypeArray;
 
@@ -313,9 +314,9 @@ namespace MFSDataGrabber
 
                 brakeStatelbl.Text = (recData.parkingBrake).ToString();
                 //   ParkingBrakes.CheckState = CheckState.Checked;
-                  bool prk = recData.parkingBrake;
+                bool prk = recData.parkingBrake;
 
-                   _ = prk ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
+                 _ = prk ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
 
                 bool asoboprk = recData.ASOBOparkingBrake;
                 _= asoboprk ? (ASOBOparkBrk.CheckState=CheckState.Checked):(ASOBOparkBrk.CheckState = CheckState.Unchecked);
@@ -553,9 +554,12 @@ namespace MFSDataGrabber
                 return;
             HDGText.Text = (RudderDir*90).ToString();
 
-            double calcSpeed;
+            
+
             TugSpeed += ElevatorDir;
-            _= TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, 5) : TugSpeed = Math.Max(TugSpeed, -5);
+            CurrentTUGSpeedLbl.Text = TugSpeed.ToString(); 
+
+            _= TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, maxTUGSpeed) : TugSpeed = Math.Max(TugSpeed, -maxTUGSpeed);
             TUGspeed.Text = TugSpeed.ToString();
 
 
@@ -593,10 +597,10 @@ namespace MFSDataGrabber
 
         private void TUGspeed_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Convert.ToChar(8))
-            //{
-            //    e.Handled = true;
-            //}
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Convert.ToChar(8))
+            {
+                e.Handled = true;
+            }
         }
     }
 }
