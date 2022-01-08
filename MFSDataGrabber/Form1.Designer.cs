@@ -403,7 +403,7 @@ namespace MFSDataGrabber
             // 
             // PushBackStartBtn
             // 
-            this.PushBackStartBtn.Location = new System.Drawing.Point(1266, 287);
+            this.PushBackStartBtn.Location = new System.Drawing.Point(926, 282);
             this.PushBackStartBtn.Name = "PushBackStartBtn";
             this.PushBackStartBtn.Size = new System.Drawing.Size(75, 23);
             this.PushBackStartBtn.TabIndex = 31;
@@ -413,7 +413,7 @@ namespace MFSDataGrabber
             // 
             // TugTestSpeedBtn
             // 
-            this.TugTestSpeedBtn.Location = new System.Drawing.Point(1185, 321);
+            this.TugTestSpeedBtn.Location = new System.Drawing.Point(845, 316);
             this.TugTestSpeedBtn.Name = "TugTestSpeedBtn";
             this.TugTestSpeedBtn.Size = new System.Drawing.Size(75, 23);
             this.TugTestSpeedBtn.TabIndex = 32;
@@ -423,7 +423,7 @@ namespace MFSDataGrabber
             // 
             // TugBtnBack
             // 
-            this.TugBtnBack.Location = new System.Drawing.Point(1185, 288);
+            this.TugBtnBack.Location = new System.Drawing.Point(845, 283);
             this.TugBtnBack.Name = "TugBtnBack";
             this.TugBtnBack.Size = new System.Drawing.Size(75, 23);
             this.TugBtnBack.TabIndex = 36;
@@ -436,7 +436,7 @@ namespace MFSDataGrabber
             this.label15.AutoSize = true;
             this.label15.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.label15.Font = new System.Drawing.Font("Unispace", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(1182, 245);
+            this.label15.Location = new System.Drawing.Point(842, 240);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(70, 14);
             this.label15.TabIndex = 39;
@@ -444,7 +444,7 @@ namespace MFSDataGrabber
             // 
             // TUGspeed
             // 
-            this.TUGspeed.Location = new System.Drawing.Point(1196, 262);
+            this.TUGspeed.Location = new System.Drawing.Point(856, 257);
             this.TUGspeed.Name = "TUGspeed";
             this.TUGspeed.Size = new System.Drawing.Size(43, 20);
             this.TUGspeed.TabIndex = 40;
@@ -474,7 +474,7 @@ namespace MFSDataGrabber
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1266, 322);
+            this.button2.Location = new System.Drawing.Point(926, 317);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 43;
@@ -489,7 +489,7 @@ namespace MFSDataGrabber
             // RudderTxt
             // 
             this.RudderTxt.AutoSize = true;
-            this.RudderTxt.Location = new System.Drawing.Point(1193, 221);
+            this.RudderTxt.Location = new System.Drawing.Point(853, 216);
             this.RudderTxt.Name = "RudderTxt";
             this.RudderTxt.Size = new System.Drawing.Size(42, 13);
             this.RudderTxt.TabIndex = 44;
@@ -503,7 +503,7 @@ namespace MFSDataGrabber
             // HDGText
             // 
             this.HDGText.AutoSize = true;
-            this.HDGText.Location = new System.Drawing.Point(1193, 197);
+            this.HDGText.Location = new System.Drawing.Point(853, 192);
             this.HDGText.Name = "HDGText";
             this.HDGText.Size = new System.Drawing.Size(31, 13);
             this.HDGText.TabIndex = 45;
@@ -533,7 +533,7 @@ namespace MFSDataGrabber
             // ParkingBrakes
             // 
             this.ParkingBrakes.AutoSize = true;
-            this.ParkingBrakes.Location = new System.Drawing.Point(1096, 263);
+            this.ParkingBrakes.Location = new System.Drawing.Point(756, 258);
             this.ParkingBrakes.Name = "ParkingBrakes";
             this.ParkingBrakes.Size = new System.Drawing.Size(64, 17);
             this.ParkingBrakes.TabIndex = 48;
@@ -543,7 +543,7 @@ namespace MFSDataGrabber
             // brakeStatelbl
             // 
             this.brakeStatelbl.AutoSize = true;
-            this.brakeStatelbl.Location = new System.Drawing.Point(1096, 234);
+            this.brakeStatelbl.Location = new System.Drawing.Point(756, 229);
             this.brakeStatelbl.Name = "brakeStatelbl";
             this.brakeStatelbl.Size = new System.Drawing.Size(41, 13);
             this.brakeStatelbl.TabIndex = 49;
@@ -552,7 +552,7 @@ namespace MFSDataGrabber
             // VelZlbl
             // 
             this.VelZlbl.AutoSize = true;
-            this.VelZlbl.Location = new System.Drawing.Point(1096, 197);
+            this.VelZlbl.Location = new System.Drawing.Point(756, 192);
             this.VelZlbl.Name = "VelZlbl";
             this.VelZlbl.Size = new System.Drawing.Size(41, 13);
             this.VelZlbl.TabIndex = 50;
@@ -561,7 +561,7 @@ namespace MFSDataGrabber
             // TUGStatusLbl
             // 
             this.TUGStatusLbl.AutoSize = true;
-            this.TUGStatusLbl.Location = new System.Drawing.Point(1193, 173);
+            this.TUGStatusLbl.Location = new System.Drawing.Point(853, 168);
             this.TUGStatusLbl.Name = "TUGStatusLbl";
             this.TUGStatusLbl.Size = new System.Drawing.Size(30, 13);
             this.TUGStatusLbl.TabIndex = 51;
@@ -570,7 +570,7 @@ namespace MFSDataGrabber
             // ElevatorLbl
             // 
             this.ElevatorLbl.AutoSize = true;
-            this.ElevatorLbl.Location = new System.Drawing.Point(1241, 221);
+            this.ElevatorLbl.Location = new System.Drawing.Point(901, 216);
             this.ElevatorLbl.Name = "ElevatorLbl";
             this.ElevatorLbl.Size = new System.Drawing.Size(46, 13);
             this.ElevatorLbl.TabIndex = 53;
@@ -581,7 +581,7 @@ namespace MFSDataGrabber
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1420, 380);
+            this.ClientSize = new System.Drawing.Size(1054, 380);
             this.Controls.Add(this.ElevatorLbl);
             this.Controls.Add(this.TUGStatusLbl);
             this.Controls.Add(this.VelZlbl);
