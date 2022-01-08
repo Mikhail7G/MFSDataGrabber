@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.FlightSimulator.SimConnect;
+using MFSDataGrabber.ExternalData;
 using System.Runtime.InteropServices;
 
 
@@ -20,9 +21,12 @@ namespace MFSDataGrabber
     public partial class Form1 : Form
     {
         // Компоненты сим коннекта.
+        ExternalDataManager DataManager;
 
         private bool simConnectStatus;
         private SimConnect simConn;
+
+        public bool A320Brakes;
 
         private double planeHeading;
         private double tugRotateAngle = 0;
@@ -82,7 +86,8 @@ namespace MFSDataGrabber
             tugHeading,
             luggage,
             door,
-            tugDisable
+            tugDisable,
+            parkBrakes
            
         }
 
@@ -167,6 +172,7 @@ namespace MFSDataGrabber
             try
             {
 
+                DataManager = new ExternalDataManager(this.Handle); 
                 ExitTypeArray = new double[20];
                 // Создаем контроллер обрабоки данных и выбираем данные, которые необходимо получать от сима.
 
@@ -179,7 +185,7 @@ namespace MFSDataGrabber
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "RUDDER POSITION", "position", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "ELEVATOR POSITION", "position", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "BRAKE PARKING POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "A32NX_PARK_BRAKE_LEVER_POS", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+              
 
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.PushbackWait, "Pushback Wait", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.TugStatus, "PUSHBACK ATTACHED", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
@@ -281,7 +287,14 @@ namespace MFSDataGrabber
                 simConn.RequestDataOnSimObjectType(REQUEST_ENUM.PushbackReq, DATA_STRUCT_ENUM.VelocityZ, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
                 simConn.RequestDataOnSimObjectType(REQUEST_ENUM.TugstatusReq, DATA_STRUCT_ENUM.TugStatus, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
 
-
+               if(DataManager.A320BrakeStatus==1)
+                {
+                    ASOBOparkBrk.CheckState = CheckState.Checked;
+                }
+               else
+                {
+                    ASOBOparkBrk.CheckState = CheckState.Unchecked;
+                }
             }
         }
 
@@ -316,9 +329,6 @@ namespace MFSDataGrabber
                 bool prk = recData.parkingBrake;
 
                  _ = prk ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
-
-                bool asoboprk = recData.ASOBOparkingBrake;
-                _= asoboprk ? (ASOBOparkBrk.CheckState=CheckState.Checked):(ASOBOparkBrk.CheckState = CheckState.Unchecked);
 
             }
 
@@ -536,7 +546,15 @@ namespace MFSDataGrabber
             _= TugSpeed > 0 ? TugSpeed = Math.Min(TugSpeed, maxTUGSpeed) : TugSpeed = Math.Max(TugSpeed, -maxTUGSpeed);
 
             simConn.MapClientEventToSimEvent(EVENT_ENUM.tugHeading, "KEY_TUG_HEADING");
-            simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(+RudderDir*90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+
+            if (TugSpeed > 0)
+            {
+                simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(+RudderDir * 90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+            }
+            else
+            {
+                simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(-RudderDir * 90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+            }
             simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)-TugSpeed);
         }
 
@@ -571,6 +589,12 @@ namespace MFSDataGrabber
             {
                 e.Handled = true;
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            simConn.MapClientEventToSimEvent(EVENT_ENUM.parkBrakes, "KEY_PARKING_BRAKES");
+            simConn.TransmitClientEvent(0U, EVENT_ENUM.parkBrakes, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
         }
     }
 }
