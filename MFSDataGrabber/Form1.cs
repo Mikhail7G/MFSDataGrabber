@@ -38,9 +38,7 @@ namespace MFSDataGrabber
         private uint emerDoor = 0;
         private uint cargoDoor = 0;
 
-        
-
-
+  
         // Переменная идентификатор Сим Коннекта.
         const int WM_USER_SIMCONNECT = 0x0402;
 
@@ -214,7 +212,7 @@ namespace MFSDataGrabber
                 DataUpdateTimer.Start();
                 ConnectStatusChange();
 
-               
+                
 
 
             }
@@ -502,6 +500,8 @@ namespace MFSDataGrabber
 
             TugRtationTimer.Stop();      
             TUGAwaitTimer.Start();
+
+            TugSpeed = 0;
         }
    
       
@@ -520,6 +520,7 @@ namespace MFSDataGrabber
 
 
             TUGAwaitTimer.Stop();
+           
             TugRtationTimer.Start();
         }
 
