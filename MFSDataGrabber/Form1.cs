@@ -105,6 +105,7 @@ namespace MFSDataGrabber
             public double rudderDirection;
             public double elevatorDirection;
             public bool parkingBrake;
+            public bool ASOBOparkingBrake;
         }
 
         private struct ExitDataStruct
@@ -178,6 +179,7 @@ namespace MFSDataGrabber
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "RUDDER POSITION", "position", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "ELEVATOR POSITION", "position", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "BRAKE PARKING POSITION", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.Plane, "A32NX_PARK_BRAKE_LEVER_POS", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.PushbackWait, "Pushback Wait", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.TugStatus, "PUSHBACK ATTACHED", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
@@ -314,6 +316,10 @@ namespace MFSDataGrabber
                   bool prk = recData.parkingBrake;
 
                    _ = prk ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
+
+                bool asoboprk = recData.ASOBOparkingBrake;
+                _= asoboprk ? (ASOBOparkBrk.CheckState=CheckState.Checked):(ASOBOparkBrk.CheckState = CheckState.Unchecked);
+
             }
 
             if (data.dwRequestID == 1)

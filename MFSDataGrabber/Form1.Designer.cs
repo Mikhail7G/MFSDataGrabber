@@ -80,6 +80,7 @@ namespace MFSDataGrabber
             this.VelZlbl = new System.Windows.Forms.Label();
             this.TUGStatusLbl = new System.Windows.Forms.Label();
             this.ElevatorLbl = new System.Windows.Forms.Label();
+            this.ASOBOparkBrk = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ConnBtn
@@ -576,12 +577,23 @@ namespace MFSDataGrabber
             this.ElevatorLbl.TabIndex = 53;
             this.ElevatorLbl.Text = "Elevator";
             // 
+            // ASOBOparkBrk
+            // 
+            this.ASOBOparkBrk.AutoSize = true;
+            this.ASOBOparkBrk.Location = new System.Drawing.Point(756, 282);
+            this.ASOBOparkBrk.Name = "ASOBOparkBrk";
+            this.ASOBOparkBrk.Size = new System.Drawing.Size(64, 17);
+            this.ASOBOparkBrk.TabIndex = 54;
+            this.ASOBOparkBrk.Text = "ParkBrk";
+            this.ASOBOparkBrk.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1054, 380);
+            this.Controls.Add(this.ASOBOparkBrk);
             this.Controls.Add(this.ElevatorLbl);
             this.Controls.Add(this.TUGStatusLbl);
             this.Controls.Add(this.VelZlbl);
@@ -689,6 +701,7 @@ namespace MFSDataGrabber
         private System.Windows.Forms.Label VelZlbl;
         private System.Windows.Forms.Label TUGStatusLbl;
         private System.Windows.Forms.Label ElevatorLbl;
+        private System.Windows.Forms.CheckBox ASOBOparkBrk;
     }
 }
 
