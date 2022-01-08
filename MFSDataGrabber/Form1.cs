@@ -488,7 +488,6 @@ namespace MFSDataGrabber
             simConn.TransmitClientEvent(0U, EVENT_ENUM.startPushBack, 1, SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
 
 
-
             TUGAwaitTimer.Start();
         }
 
