@@ -38,7 +38,6 @@ namespace MFSDataGrabber
         private uint emerDoor = 0;
         private uint cargoDoor = 0;
 
-  
         // Переменная идентификатор Сим Коннекта.
         const int WM_USER_SIMCONNECT = 0x0402;
 
