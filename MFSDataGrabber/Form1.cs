@@ -26,7 +26,8 @@ namespace MFSDataGrabber
         private bool simConnectStatus;
         private SimConnect simConn;
 
-        public bool A320Brakes;
+        public bool defaultParkingBrakes;//для стандартных самолетов с тормозами из simConn
+        public bool A320Brakes;// A320 FBW
 
         private double planeHeading;
         private double tugRotateAngle = 0;
@@ -108,7 +109,7 @@ namespace MFSDataGrabber
             public double rudderDirection;
             public double elevatorDirection;
             public bool parkingBrake;
-            public bool ASOBOparkingBrake;
+          
         }
 
         private struct ExitDataStruct
@@ -190,6 +191,8 @@ namespace MFSDataGrabber
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.PushbackWait, "Pushback Wait", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.TugStatus, "PUSHBACK ATTACHED", "Bool", SIMCONNECT_DATATYPE.INT32, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.RotationY, "ROTATION VELOCITY BODY Y", "feet per second", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                simConn.AddToDataDefinition(DATA_STRUCT_ENUM.RotationX, "ROTATION VELOCITY BODY X", "feet per second", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
                 simConn.AddToDataDefinition(DATA_STRUCT_ENUM.VelocityZ, "Velocity Body Z", "feet per second", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
 
                 for (uint i=0;i<20;i++)
@@ -206,6 +209,8 @@ namespace MFSDataGrabber
                 simConn.RegisterDataDefineStruct<int>(DATA_STRUCT_ENUM.TugStatus);
       
                 simConn.RegisterDataDefineStruct<double>(DATA_STRUCT_ENUM.VelocityZ);
+                simConn.RegisterDataDefineStruct<double>(DATA_STRUCT_ENUM.RotationX);
+                simConn.RegisterDataDefineStruct<double>(DATA_STRUCT_ENUM.RotationY);
 
                 simConn.OnRecvSimobjectDataBytype += OnResiveData;
 
@@ -287,14 +292,24 @@ namespace MFSDataGrabber
                 simConn.RequestDataOnSimObjectType(REQUEST_ENUM.PushbackReq, DATA_STRUCT_ENUM.VelocityZ, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
                 simConn.RequestDataOnSimObjectType(REQUEST_ENUM.TugstatusReq, DATA_STRUCT_ENUM.TugStatus, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
 
-               if(DataManager.A320BrakeStatus==1)
-                {
-                    ASOBOparkBrk.CheckState = CheckState.Checked;
-                }
-               else
-                {
-                    ASOBOparkBrk.CheckState = CheckState.Unchecked;
-                }
+                FBWExternalOperations();
+            }
+        }
+        //вызов внешних функций самолетов не через simConnect, а через wasm и fsupic
+        private void FBWExternalOperations()
+        {
+            FBWParkingBrakesStatus();
+        }
+        //стояночный тормоз самолета A320 FBW
+        private void FBWParkingBrakesStatus()
+        {
+            if (DataManager.A320BrakeStatus == 1)
+            {
+                ASOBOparkBrk.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                ASOBOparkBrk.CheckState = CheckState.Unchecked;
             }
         }
 
@@ -327,7 +342,7 @@ namespace MFSDataGrabber
                 brakeStatelbl.Text = (recData.parkingBrake).ToString();
                 //   ParkingBrakes.CheckState = CheckState.Checked;
                 bool prk = recData.parkingBrake;
-
+                defaultParkingBrakes = prk;
                  _ = prk ? (ParkingBrakes.CheckState = CheckState.Checked) : (ParkingBrakes.CheckState = CheckState.Unchecked);
 
             }
@@ -491,11 +506,8 @@ namespace MFSDataGrabber
         {
             if (!simConnectStatus)
                 return;
-            TugSpeed = 0;
 
-            TugRtationTimer.Stop();      
-            TUGAwaitTimer.Start();
-
+            TUGStopPB();
         }
  
         private void TugBtnBack_Click(object sender, EventArgs e)
@@ -504,10 +516,28 @@ namespace MFSDataGrabber
                 return;
             TugSpeed = 0;
 
-            simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
+            //стояночный тормоз
+            if ((DataManager.A320BrakeStatus == 0) || (defaultParkingBrakes == false)) 
+            {
 
+                simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.PushbackWait, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, 0);
+
+                TUGStartPB();
+            }
+        }
+
+        private void TUGStartPB()
+        {
             TUGAwaitTimer.Stop();
             TugRtationTimer.Start();
+        }
+
+        private void TUGStopPB()
+        {
+            TugSpeed = 0;
+
+            TugRtationTimer.Stop();
+            TUGAwaitTimer.Start();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -537,6 +567,12 @@ namespace MFSDataGrabber
 
             if (!simConnectStatus)
                 return;
+
+            if ((DataManager.A320BrakeStatus == 1) || (defaultParkingBrakes))
+            {
+                TUGStopPB();
+            }
+
             HDGText.Text = (RudderDir*90).ToString();
 
             maxTUGSpeed = Double.Parse(TUGspeed.Text);
@@ -554,8 +590,11 @@ namespace MFSDataGrabber
             else
             {
                 simConn.TransmitClientEvent(0U, EVENT_ENUM.tugHeading, SetTugHeading(-RudderDir * 90), SENDER_EVENT_ENUM.group0, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+                //добавлено для того, что когда самолет буксируется в перед, стандартная функция буксировщика хреново его поворачивает, с этим быстрее
+                simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationY, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)RudderDir*0.2);
             }
             simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.VelocityZ, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)-TugSpeed);
+            simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationX, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)0);
         }
 
         private void RudderTxt_Click(object sender, EventArgs e)

@@ -12,9 +12,9 @@ namespace MFSDataGrabber.ExternalData
     public class ExternalDataManager
     {
         private MSFSVariableServices ExternalServise = null;
-        private FsLVar  LvarListener = null;
-        private bool started =false;
-        public double A320BrakeStatus = 0;
+        private FsLVar LvarListener = null;
+        private bool started = false;
+        public double A320BrakeStatus { get; set; }
 
         private string A320FBWBrake = "A32NX_PARK_BRAKE_LEVER_POS";
 
