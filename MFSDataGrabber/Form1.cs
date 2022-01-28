@@ -89,7 +89,7 @@ namespace MFSDataGrabber
             door,
             tugDisable,
             parkBrakes
-           
+          
         }
 
         private enum SENDER_EVENT_ENUM
