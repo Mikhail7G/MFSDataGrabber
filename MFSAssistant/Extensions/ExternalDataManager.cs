@@ -14,7 +14,10 @@ namespace MFSAssistant.Extensions
     public partial class ExternalDataManager
     {
         private MSFSVariableServices ExternalService = null;
-        private Dictionary<string,double> DataOperation = null;//слвоварь lvar значений <название,значение из lvar> <A32NX_PARK_BRAKE_LEVER_POS,double>
+        // private Dictionary<string,double> DataOperation = null;//слвоварь lvar значений <название,значение из lvar> <A32NX_PARK_BRAKE_LEVER_POS,double>
+        private Dictionary<string, LvalSelector<object>> DataOperation = null;
+
+        private bool DataResieved = false;
 
         public ExternalDataManager(IntPtr handle)
         {
@@ -30,12 +33,17 @@ namespace MFSAssistant.Extensions
             ExternalService.Start();
             ExternalService.LogLVars();
 
-            DataOperation = new Dictionary<string, double>();
+            DataOperation = new Dictionary<string, LvalSelector<object>>();
         }
 
         public void AddDataToDefenition(string data)
         {//добавление данных для обратоки 
-            DataOperation.Add(data, 0);
+            
+        }
+
+        public void AddDataToDefenition<T>(T data,string valuename)
+        {//добавление данных для обратоки 
+            DataOperation.Add(valuename, new LvalSelector<object>(valuename,data));
         }
 
         private void ExternalServiсe_OnValuesChanged(object sender, EventArgs e)
@@ -50,8 +58,22 @@ namespace MFSAssistant.Extensions
                 FsLVar lvar = ExternalService.LVars[data.Key];
                 string key = data.Key;
                 if (lvar != null)
-                    DataOperation[key] = lvar.Value;
+                DataOperation[key] = new LvalSelector<object>(key, lvar.Value);
+            }
+            DataResieved = true;
+        }
 
+        //получаем значение по ключу
+        public T ReturnValueByKey<T>(string key)
+        {
+            if (DataResieved)
+            {
+                var data = DataOperation[key];
+                return (T)data.Value;
+            }
+            else
+            {
+                return default(T);
             }
         }
     }

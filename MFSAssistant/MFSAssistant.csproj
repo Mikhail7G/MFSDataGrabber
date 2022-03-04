@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Extensions\DataManagerPartials.cs" />
     <Compile Include="Extensions\ExternalDataManager.cs" />
+    <Compile Include="Extensions\LvalSelector.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -8,6 +8,8 @@ namespace MFSAssistant.Services
 {
     //все структуры и enums для работы с данными через FSUIPC;
 
+   
+
     //самолет с набором необходимых значений
     public struct Plane
     {

@@ -19,6 +19,7 @@ namespace MFSAssistant.Services
 
         public bool SimConnectStatus { set; get; }
         private double A320brk { set; get; }//индивидуально для модели A320 FBW
+        public const string A320FBW_BRAKES = "A32NX_PARK_BRAKE_LEVER_POS";
 
         private double tugSpeed = 0;//скорость буксировщика
         public double MaxTugSdeed { set; get; }
@@ -40,8 +41,7 @@ namespace MFSAssistant.Services
                 PlayerControlledAfc = new Plane();
 
                 DataManager = new ExternalDataManager(hWind);
-                DataManager.AddDataToDefenition("A32NX_PARK_BRAKE_LEVER_POS");
-                DataManager.AddDataToDefenition("A32NX_SPOILERS_ARMED");
+                DataManager.AddDataToDefenition(typeof(bool), A320FBW_BRAKES);
 
                 simConn = new SimConnect("MFSAssistant", hWind, WM_USER_SIMCONNECT, null, 0);
 
@@ -127,7 +127,7 @@ namespace MFSAssistant.Services
 
         private void ExternalDataUpdate()
         {
-            A320brk = DataManager.GetA320FBWBrakeStatus();
+            A320brk = DataManager.ReturnValueByKey<double>(A320FBW_BRAKES);
         }
 
         public void ReceiveMessage()
