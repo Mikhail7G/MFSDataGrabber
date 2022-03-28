@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FSUIPC;
-using MFSAssistant.Services;
+
 
 namespace MFSAssistant.Extensions
 {
 
-    //Класс работы с данными, непокрываемые simConnect. Используется FSUIPC и WASM
-    //partial - вынес получение данных в другой файл для наглядности
+    /// <summary>
+    /// Класс работы с данными, непокрываемые simConnect. Используется FSIUPC и WASM
+    /// </summary>
     public partial class ExternalDataManager
     {
-        private MSFSVariableServices ExternalService = null;
-        // private Dictionary<string,double> DataOperation = null;//слвоварь lvar значений <название,значение из lvar> <A32NX_PARK_BRAKE_LEVER_POS,double>
-        private Dictionary<string, LvalSelector<object>> DataOperation = null;
+        private MSFSVariableServices externalService = null;
+        private Dictionary<string, LvalSelector<object>> dataOperation = null;
 
-        private bool DataResieved = false;
+        private bool dataResieved = false;//Нужно так как обновление данных происходит позже, чем первый запрос от сима.
 
         public ExternalDataManager(IntPtr handle)
         {
@@ -26,24 +24,24 @@ namespace MFSAssistant.Extensions
 
         private void InitExternalService(IntPtr handle)
         {//инициализируем библиотеку и начальные параметры
-            ExternalService = new MSFSVariableServices();
-            ExternalService.OnValuesChanged += ExternalServiсe_OnValuesChanged;
-            ExternalService.Init(handle);
-            ExternalService.LVARUpdateFrequency = 10;
-            ExternalService.Start();
-            ExternalService.LogLVars();
+            externalService = new MSFSVariableServices();
+            externalService.OnValuesChanged += ExternalServiсe_OnValuesChanged;
+            externalService.Init(handle);
+            externalService.LVARUpdateFrequency = 10;
+            externalService.Start();
+            externalService.LogLVars();
 
-            DataOperation = new Dictionary<string, LvalSelector<object>>();
+            dataOperation = new Dictionary<string, LvalSelector<object>>();
         }
 
         public void AddDataToDefenition(string data)
-        {//добавление данных для обратоки 
-            
+        {
+            //INOP  
         }
 
-        public void AddDataToDefenition<T>(T data,string valuename)
+        public void AddDataToDefenition<T>(T dataType, string valuename)
         {//добавление данных для обратоки 
-            DataOperation.Add(valuename, new LvalSelector<object>(valuename,data));
+            dataOperation.Add(valuename, new LvalSelector<object>(valuename,dataType));
         }
 
         private void ExternalServiсe_OnValuesChanged(object sender, EventArgs e)
@@ -53,22 +51,22 @@ namespace MFSAssistant.Extensions
 
         public void UpdateRealTime()
         {//обрабатываем все и запихиваем в словарь
-            foreach(var data in DataOperation.ToList())
+            foreach(var data in dataOperation.ToList())
             {
-                FsLVar lvar = ExternalService.LVars[data.Key];
+                FsLVar lvar = externalService.LVars[data.Key];
                 string key = data.Key;
                 if (lvar != null)
-                DataOperation[key] = new LvalSelector<object>(key, lvar.Value);
+                dataOperation[key] = new LvalSelector<object>(key, lvar.Value);
             }
-            DataResieved = true;
+            dataResieved = true;
         }
 
         //получаем значение по ключу
         public T ReturnValueByKey<T>(string key)
         {
-            if (DataResieved)
+            if (dataResieved)
             {
-                var data = DataOperation[key];
+                var data = dataOperation[key];
                 return (T)data.Value;
             }
             else

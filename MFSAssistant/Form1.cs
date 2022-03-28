@@ -26,7 +26,7 @@ namespace MFSAssistant
         public void StartServices()
         {
             Manager = new SimConnectManager(this.Handle);//взаимодействие с симом через simconnect
-            Manager.BrakeNotify += Manager_BrakeNotify;
+            Manager.BrakeEventNotify += Manager_BrakeNotify;
             //таймера оновления приема данных от клиента и управление буксировщиком
             DataUpdateTimer.Start();
             TUGTimer.Start();

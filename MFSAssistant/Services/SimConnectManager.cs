@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Microsoft.FlightSimulator.SimConnect;
 using MFSAssistant.Extensions;
 
 namespace MFSAssistant.Services
 {
+    /// <summary>
+    /// Главный обработчик взаимодействия с симом через SimConnect
+    /// </summary>
     public class SimConnectManager
     {
         private SimConnect simConn;
-        ExternalDataManager DataManager;
+        private ExternalDataManager dataManager;
         public Plane PlayerControlledAfc;//управляемый игроком самолет
         public bool TugConnected { set; get; }//подключен ли тягач
         public bool ParkingBrakeStatus { set; get; }//стояночный тормоз
@@ -26,8 +24,8 @@ namespace MFSAssistant.Services
 
         public const int WM_USER_SIMCONNECT = 0x0402;//окно сима
 
-        public delegate void ParkBrakeHadler();
-        public event ParkBrakeHadler BrakeNotify;
+        public delegate void ParkBrakeHandler();
+        public event ParkBrakeHandler BrakeEventNotify;
         public bool StartAutoPB { set; get; }//INOP
 
         public SimConnectManager(IntPtr hWind)
@@ -40,8 +38,8 @@ namespace MFSAssistant.Services
 
                 PlayerControlledAfc = new Plane();
 
-                DataManager = new ExternalDataManager(hWind);
-                DataManager.AddDataToDefenition(typeof(bool), A320FBW_BRAKES);
+                dataManager = new ExternalDataManager(hWind);
+                dataManager.AddDataToDefenition(typeof(double), A320FBW_BRAKES);
 
                 simConn = new SimConnect("MFSAssistant", hWind, WM_USER_SIMCONNECT, null, 0);
 
@@ -82,11 +80,9 @@ namespace MFSAssistant.Services
                 simConn.MapClientEventToSimEvent(EVENT_ENUM.door, "TOGGLE_AIRCRAFT_EXIT");//INOP
                 simConn.MapClientEventToSimEvent(EVENT_ENUM.toggleJetway, "TOGGLE_JETWAY");
 
-
-
-                simConn.OnRecvSimobjectDataBytype += OnResieveData;
-                simConn.OnRecvOpen += SimConn_OnRecvOpen;
-                simConn.OnRecvQuit += SimConn_OnRecvQuit;
+                simConn.OnRecvSimobjectDataBytype += OnDataRecieved;
+                simConn.OnRecvOpen += OnRecvOpen;
+                simConn.OnRecvQuit += OnRecvQuit;
             }
             catch(Exception ex)
             {
@@ -94,17 +90,17 @@ namespace MFSAssistant.Services
             }
         }
 
-        private void SimConn_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
+        private void OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
         {
             SimConnectStatus = false;
         }
 
-        private void SimConn_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
+        private void OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
         {
             SimConnectStatus = true;
         }
 
-        private void OnResieveData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
+        private void OnDataRecieved(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
             //обработка полученных данных от клиента
 
@@ -125,9 +121,12 @@ namespace MFSAssistant.Services
             ParkingBrakesStatus();
         }
 
+        /// <summary>
+        /// Обработка данных от сима через FSUIPC
+        /// </summary>
         private void ExternalDataUpdate()
         {
-            A320brk = DataManager.ReturnValueByKey<double>(A320FBW_BRAKES);
+            A320brk = dataManager.ReturnValueByKey<double>(A320FBW_BRAKES);
         }
 
         public void ReceiveMessage()
@@ -199,7 +198,7 @@ namespace MFSAssistant.Services
 
         private void ParkingBrakesStatus()
         {
-            BrakeNotify.Invoke();
+            BrakeEventNotify.Invoke();
 
             if ((A320brk == 1) || (PlayerControlledAfc.parkingBrake == true))
             {
@@ -212,6 +211,9 @@ namespace MFSAssistant.Services
             }
         }
 
+        /// <summary>
+        /// Управление буксировщиком
+        /// </summary>
         public void UpdatePB()
         {
 
@@ -221,6 +223,7 @@ namespace MFSAssistant.Services
             }
 
             //управление поворотом и скоростью как вперед так и назад с помощью осей rudder и elevator
+            //Скорость задается как передача ускорения по осям. Ось X замораживается, т.к. самолет может ударить хвостом при буксировки на тормозах
 
             tugSpeed += PlayerControlledAfc.elevatorDirection;
             _ = tugSpeed > 0 ? tugSpeed = Math.Min(tugSpeed, MaxTugSdeed) : tugSpeed = Math.Max(tugSpeed, -MaxTugSdeed);
@@ -239,6 +242,10 @@ namespace MFSAssistant.Services
             simConn.SetDataOnSimObject(DATA_STRUCT_ENUM.RotationX, SimConnect.SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG.DEFAULT, (double)0);
 
         }
+
+        /// <summary>
+        /// Преобразование углов поворота буксировщика к углам сима
+        /// </summary>
         private uint SetTugHeading(double angle)
         {
             var hdg = PlayerControlledAfc.heading;
@@ -247,7 +254,6 @@ namespace MFSAssistant.Services
             hdg = hdg * 11930464;
 
             return (uint)hdg;
-
         }
 
     }
